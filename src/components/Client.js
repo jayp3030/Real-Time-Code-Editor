@@ -7,7 +7,6 @@ function Client({username}) {
 
     const arr = username.split(" ");
 
-    console.log(arr);
     arr.forEach(element => {
         summName+=element.charAt(0).toUpperCase();
     });

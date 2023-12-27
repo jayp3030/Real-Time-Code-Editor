@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Client from "../components/Client";
+import Editor from "../components/Editor";
 
 const Editorpages = () => {
 
@@ -44,7 +45,9 @@ const Editorpages = () => {
           <button className="leaveBtn">Leave Room</button>
         </div>
       </div>
-      <div className="right"></div>
+      <div className="right">
+        <Editor/>
+      </div>
     </div>
   );
 };
