@@ -1,25 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
+import { initSocket } from "../socket";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Editorpages = () => {
 
-  const [users , setUsers] = useState( [
-    {soketid : 1 , userName : 'john doe'},
-    {soketid : 2 , userName : 'john doe'},
-    {soketid : 3 , userName : 'alice bob'},
-    {soketid : 4 , userName : 'alice bob'},
-    {soketid : 5 , userName : 'alice bob'},
-    {soketid : 6 , userName : 'alice bob'},
-    {soketid : 7 , userName : 'alice bob'},
-    {soketid : 8 , userName : 'alice bob'},
-    {soketid : 9 , userName : 'alice bob'},
-    {soketid : 10 , userName : 'alice bob'},
-    {soketid : 11 , userName : 'alice bob'},
-    {soketid : 12 , userName : 'alice bob'},
-    {soketid : 13 , userName : 'alice bob'},
-    {soketid : 14 , userName : 'alice bob'},
-  ])
+  const socketRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { roomId } = useParams()
+
+  const [users , setUsers] = useState( [])
+
+  useEffect(() => {
+
+    const init = async () => {
+        
+      if (! location.state) {
+        navigate('/');
+      }
+
+        const handleError = (e) => {
+          console.log('socket error : ' , e);
+          toast.error('Socket Connection Failed Try again later')
+          navigate('/')
+        }
+
+        socketRef.current = await initSocket();
+        socketRef.current.on('connect-error' , (err) => handleError(err));
+        socketRef.current.on('connection-failed' , (err) => handleError(err));
+
+        // emiting join event
+
+        socketRef.current.emit('join' , {
+          roomId,
+          userName : location.state?.userName
+        })
+
+        // listening to joined event
+
+        socketRef.current.on('joined' , ({users , userName , socketId}) => {
+            if (userName !== location.state.userName) {
+              toast.success(`${userName} joined the room`);
+              console.log(`${userName} joined`);
+            }
+            setUsers(users);
+            console.log(users);
+        } )
+    }
+
+    init();
+  } , [])
 
   return (
     <div className="editorWrapper">
@@ -35,7 +68,7 @@ const Editorpages = () => {
           <div className="users">
           { users.map( (user) => 
             (
-            <Client key={user.soketid} username = {user.userName} />
+            <Client key={Math.random()} username = {user.userName} />
             )
           )}
           </div>

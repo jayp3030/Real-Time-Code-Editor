@@ -14,7 +14,7 @@ function Client({username}) {
   return (
     <div className='user-info'>
         <Avatar summName = {summName} />
-        <span>{username}</span>
+        <span>{`${username.substring(0,7)}..`}</span>
     </div>
   )
 }
