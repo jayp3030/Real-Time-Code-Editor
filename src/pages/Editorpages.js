@@ -49,9 +49,29 @@ const Editorpages = () => {
             setUsers(users);
             console.log(users);
         } )
+
+        // listening on disconnecting from server
+
+        socketRef.current.on('disconnected' , ({socketId , userName}) => {
+
+            toast.success(`${userName} left the room..`);
+            setUsers( (prev) => {
+              return prev.filter( 
+                (user) =>  user.socketId !== socketId   // remove the disconnected user from user list
+                 )
+            })
+        } )
     }
 
     init();
+
+    // clean up function - used when component get unmounted so all the resources will be released
+
+    return () => {
+      socketRef.current.disconnect();
+      socketRef.current.off('joined');    // unsubscribing joined event
+      socketRef.current.off('disconnect');    //cunsubscribing disconnect event
+    }
   } , [])
 
   return (

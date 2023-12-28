@@ -24,6 +24,8 @@ const getAllConnectedUsers = (roomId) => {
 io.on( 'connection' , (socket) =>{
     console.log('socket connected',socket.id)
 
+    // listening on joining from client
+
     socket.on('join' , ({roomId , userName}) => {
         userSocketObj[socket.id] = userName
         socket.join(roomId);
@@ -40,7 +42,30 @@ io.on( 'connection' , (socket) =>{
             });
         });
     })
+
+    // listening on disconnecting from client
+
+    socket.on('disconnecting' , () => {
+        const rooms = [...socket.rooms];
+        console.log('rooms : ',rooms);
+
+        rooms.forEach( (roomId) => {
+            socket.in(roomId).emit('disconnected' , {
+                socketId : socket.id,
+                userName : userSocketObj[socket.id]
+            })
+        })
+
+        delete userSocketObj[socket.id];    // removing user from joined user list because it will get disconnected
+        // leaving the room 
+        socket.leave();
+    })
 })
+
+
+
+
+
 
 server.listen(port , () =>{
     console.log(`listening on port : ${port}`)
