@@ -11,8 +11,21 @@ const Editorpages = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { roomId } = useParams()
+  const [users , setUsers] = useState([])
 
-  const [users , setUsers] = useState( [])
+  const copyroomId = async() => {
+      try {
+        await navigator.clipboard.writeText(roomId);
+        toast.success('Room Id has been copied to Clipboard')
+      } catch (error) {
+        toast.error('Error in Copying Room Id to clipboard')
+        console.log(error);
+      }
+  }
+  const leaveRoom = () => {
+      navigate('/');
+  }
+
 
   useEffect(() => {
 
@@ -94,8 +107,8 @@ const Editorpages = () => {
           </div>
         </div>
         <div className="bottom">
-          <button className="copyBtn">Copy Room Id</button>
-          <button className="leaveBtn">Leave Room</button>
+          <button className="copyBtn" onClick={copyroomId} >Copy Room Id</button>
+          <button className="leaveBtn"  onClick={leaveRoom} >Leave Room</button>
         </div>
       </div>
       <div className="right">

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef } from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -44,6 +45,10 @@ function Editor({socketRef , roomId}) {
     }
   useEffect(() => {
     init()
+
+    return () => {
+      socketRef.current.off('code-change');
+    }
   }, []); // Empty dependency array ensures useEffect runs once after the initial render
   
 
