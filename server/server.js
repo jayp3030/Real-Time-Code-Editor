@@ -43,6 +43,12 @@ io.on( 'connection' , (socket) =>{
         });
     })
 
+    // listening on code change event from client
+
+    socket.on('code-change' , ({roomId , code}) => {
+        socket.in(roomId).emit('code-change' , { code })        // emit code-change to all roomId and sending code
+    })
+
     // listening on disconnecting from client
 
     socket.on('disconnecting' , () => {
@@ -60,6 +66,8 @@ io.on( 'connection' , (socket) =>{
         // leaving the room 
         socket.leave();
     })
+
+
 })
 
 

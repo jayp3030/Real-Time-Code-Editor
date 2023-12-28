@@ -99,7 +99,7 @@ const Editorpages = () => {
         </div>
       </div>
       <div className="right">
-        <Editor/>
+        <Editor socketRef={socketRef} roomId={roomId} />
       </div>
     </div>
   );
