@@ -30,6 +30,8 @@ io.on( 'connection' , (socket) =>{
 
         const users = getAllConnectedUsers(roomId);
 
+        console.log(users);
+
         users.forEach(({socketId}) => {
             io.to(socketId).emit('joined',{
                 users,

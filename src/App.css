@@ -197,9 +197,10 @@ form span{
 .users{
     height: calc(100% - 2rem);
     display: flex;
-    flex-wrap: wrap;
-    overflow-y: auto;
-    
+    align-items: flex-start;
+    align-content: flex-start;
+    flex-wrap :wrap;
+    overflow-y: auto;    
 }
 .user-info{
     height: fit-content;
