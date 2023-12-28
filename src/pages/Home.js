@@ -14,8 +14,6 @@ function Home() {
         const id = uuidv4();
         setRoomId(id);
         toast.success('New Room Created');
-
-        console.log(id);
     }
     
     const joinRoom = (e) => {
@@ -53,7 +51,6 @@ function Home() {
             className="inputBox" 
             placeholder="Room ID" 
             onChange={ (e) => {
-                console.log(e.target.value);
                 setRoomId(e.target.value)
             } }
             value={roomId}
@@ -64,7 +61,6 @@ function Home() {
             className="inputBox" 
             placeholder="User Name"
             onChange={ (e) => {
-                console.log(e.target.value);
                 setUserName(e.target.value)
             } } 
             value={userName}
@@ -81,7 +77,7 @@ function Home() {
       </div>
 
       <div className="footer">
-        Developed By <a href="/">JAY</a>
+        Developed By <a href="https://github.com/jayp3030/Real-Time-Code-Editor">JAY</a>
       </div>
     </div>
   );

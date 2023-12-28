@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 const Editorpages = () => {
 
   const socketRef = useRef(null);
+  const codeRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { roomId } = useParams()
@@ -57,10 +58,12 @@ const Editorpages = () => {
         socketRef.current.on('joined' , ({users , userName , socketId}) => {
             if (userName !== location.state.userName) {
               toast.success(`${userName} joined the room`);
-              console.log(`${userName} joined`);
             }
             setUsers(users);
-            console.log(users);
+            socketRef.current.emit('sync-code' , {
+              code : codeRef.current,
+              socketId,
+            })
         } )
 
         // listening on disconnecting from server
@@ -112,7 +115,11 @@ const Editorpages = () => {
         </div>
       </div>
       <div className="right">
-        <Editor socketRef={socketRef} roomId={roomId} />
+        <Editor 
+          socketRef={socketRef} 
+          roomId={roomId}
+          onCodeChange = {(code) => codeRef.current = code }
+        />
       </div>
     </div>
   );

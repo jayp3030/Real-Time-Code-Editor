@@ -32,8 +32,6 @@ io.on( 'connection' , (socket) =>{
 
         const users = getAllConnectedUsers(roomId);
 
-        console.log(users);
-
         users.forEach(({socketId}) => {
             io.to(socketId).emit('joined',{
                 users,
@@ -48,12 +46,16 @@ io.on( 'connection' , (socket) =>{
     socket.on('code-change' , ({roomId , code}) => {
         socket.in(roomId).emit('code-change' , { code })        // emit code-change to all roomId and sending code
     })
+    // listening on code sync event from client
+
+    socket.on('sync-code' , ({socketId , code}) => {
+        io.to(socketId).emit('code-change' , { code })        // emit code-change to all roomId and sending code
+    })
 
     // listening on disconnecting from client
 
     socket.on('disconnecting' , () => {
         const rooms = [...socket.rooms];
-        console.log('rooms : ',rooms);
 
         rooms.forEach( (roomId) => {
             socket.in(roomId).emit('disconnected' , {

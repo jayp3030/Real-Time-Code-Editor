@@ -7,7 +7,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
 
-function Editor({socketRef , roomId}) {
+function Editor({socketRef , roomId , onCodeChange}) {
 
     const editorRef = useRef(null);
 
@@ -28,18 +28,15 @@ function Editor({socketRef , roomId}) {
       }
 
       editorRef.current.on('change' , (instance , changes) => {     // 'change' is the event of codemirror which is fired when we do something in code-editor
-        console.log('changes : ' , changes);
         const {origin} = changes ;   // origin property of changes object gives the info about event on editor (input , cut , paste etc...)
         const code = instance.getValue();
-
+        onCodeChange(code);
         if (origin !== 'setValue') {
           socketRef.current.emit('code-change' , {
             roomId,
             code,
           })
         }
-
-        console.log(code);
       })
 
     }
